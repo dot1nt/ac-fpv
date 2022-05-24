@@ -1,2 +1,2 @@
 # ac-fpv
-Assetto Corsa fpv drone mod
+Assetto Corsa Fpv Drone Mod
