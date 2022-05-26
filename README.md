@@ -6,8 +6,8 @@ I don't really know how to program, so if you see something wrong, please make a
 **Content Manager / Custom Shaders Patch is required**
 
 1. Enable Free Camera | [Tutorial](https://www.reddit.com/r/assettocorsa/comments/anbgjt/how_to_enable_free_camera_mouse_look_in_assetto/)
-2. Download or clone this repo and copy the files to the Assetto Corsa apps folder
-> C:\Program Files (x86)\Steam\steamapps\common\assettocorsa\apps\python\acfpv
+2. Download or clone this repo and copy the apps folder in the Assetto Corsa folder
+> C:\Program Files (x86)\Steam\steamapps\common\assettocorsa\
 3. Check inputs in Content Manager
 > 1 = Throttle, 2 = Roll, 3 = Pitch, 4 = Yaw
 
