@@ -21,6 +21,7 @@ def load():
     global drag;		drag = config.getint('Physics', 'drag')
 
     global cam_angle;	cam_angle = config.getint('Drone', 'cam_angle')
+    global cam_fov;     cam_fov = config.getint('Drone', 'cam_fov')
 
 def save(*x):
     config = ConfigParser()
@@ -44,7 +45,8 @@ def save(*x):
     }
 
     config['Drone'] = {
-        'cam_angle': str(cam_angle)
+        'cam_angle': str(cam_angle),
+        'cam_fov': str(cam_fov)
     }
 
     with open(config_file, 'w') as configfile:

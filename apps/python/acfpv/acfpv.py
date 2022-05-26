@@ -43,6 +43,7 @@ def f_drag(val): config.drag = val
 def f_gravity(val): config.gravity = val
 
 def f_cam_angle(val): config.cam_angle = val
+def f_cam_fov(val): config.cam_fov = val
 
 def initApp():
     appWindow = ac.newApp("ac-fpv")
@@ -61,6 +62,7 @@ def initApp():
     addSpinner(appWindow, "Gravity", config.gravity, (0.0, 500.0), (230, 150), f_gravity)
 
     addSpinner(appWindow, "Camera Angle", config.cam_angle, (0.0, 90.0), (10, 200), f_cam_angle)
+    addSpinner(appWindow, "Camera Fov", config.cam_fov, (60.0, 150.0), (120, 200), f_cam_fov)
 
     b_save = ac.addButton(appWindow, "Save")
     ac.setSize(b_save, 100, 20)
@@ -75,6 +77,8 @@ def acMain(ac_version):
 def acUpdate(deltaT):
     if ac.getCameraMode() != 6:
         return
+
+    drone.setFov(config.cam_fov)
 
     drone.getRot()
     drone.getPos()

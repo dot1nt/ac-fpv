@@ -42,6 +42,9 @@ class Drone:
         self.x = 0
         self.y = 0
         self.z = 0
+    
+    def setFov(self, val):
+        ac.ext_setCameraFov(float(val))
 
     def getPos(self):
         self.position = ac.ext_getCameraPosition()
