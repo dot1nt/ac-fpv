@@ -76,9 +76,9 @@ class Drone:
         self.y += -vec[1]
         self.z += vec[2]
 
-    def physics(self):
-        _drag = config.drag / 1000
-        gravity = config.gravity / 10000
+    def physics(self, deltaT):
+        _drag = config.drag * deltaT / 10
+        gravity = config.gravity * deltaT / 1000
 
         self.x = drag(self.x, _drag)
         self.y = drag(self.y, _drag)

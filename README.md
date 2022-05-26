@@ -15,10 +15,8 @@ I don't really know how to program, so if you see something wrong, please make a
 
 4. Load in game and press F7.
 
-**Physics/Inputs are based on fps right now. Cap them at 60 if you have any issues**
 
 # Todo / Ideas
-- Make Physics/Inputs fps independent
 - Better physics
 - Accurate rates (betaflight, kiss, raceflight)
 - Osd

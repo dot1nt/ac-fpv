@@ -48,17 +48,17 @@ def initApp():
     appWindow = ac.newApp("ac-fpv")
     ac.setSize(appWindow, 340, 270)
 
-    addSpinner(appWindow, "Roll Rate", config.roll_rate, (0.0, 100.0), (10, 50), f_roll_rate)
-    addSpinner(appWindow, "Pitch Rate", config.pitch_rate, (0.0, 100.0), (120, 50), f_pitch_rate)
-    addSpinner(appWindow, "Yaw Rate", config.yaw_rate, (0.0, 100.0), (230, 50), f_yaw_rate)
+    addSpinner(appWindow, "Roll Rate", config.roll_rate, (0.0, 50.0), (10, 50), f_roll_rate)
+    addSpinner(appWindow, "Pitch Rate", config.pitch_rate, (0.0, 50.0), (120, 50), f_pitch_rate)
+    addSpinner(appWindow, "Yaw Rate", config.yaw_rate, (0.0, 50.0), (230, 50), f_yaw_rate)
 
     addSpinner(appWindow, "Roll Expo", config.roll_expo, (0.0, 100.0), (10, 100), f_roll_expo)
     addSpinner(appWindow, "Pitch Expo", config.pitch_expo, (0.0, 100.0), (120, 100), f_pitch_expo)
     addSpinner(appWindow, "Yaw Expo", config.yaw_expo, (0.0, 100.0), (230, 100), f_yaw_expo)
 
-    addSpinner(appWindow, "Throttle Scale", config.scale, (0.0, 200.0), (10, 150), f_scale)
-    addSpinner(appWindow, "Drag", config.drag, (0.0, 100.0), (120, 150), f_drag)
-    addSpinner(appWindow, "Gravity", config.gravity, (0.0, 100.0), (230, 150), f_gravity)
+    addSpinner(appWindow, "Throttle Scale", config.scale, (0.0, 500.0), (10, 150), f_scale)
+    addSpinner(appWindow, "Drag", config.drag, (0.0, 50.0), (120, 150), f_drag)
+    addSpinner(appWindow, "Gravity", config.gravity, (0.0, 500.0), (230, 150), f_gravity)
 
     addSpinner(appWindow, "Camera Angle", config.cam_angle, (0.0, 90.0), (10, 200), f_cam_angle)
 
@@ -73,17 +73,20 @@ def acMain(ac_version):
     return "ac-fpv"
 
 def acUpdate(deltaT):
+    if ac.getCameraMode() != 6:
+        return
+
     drone.getRot()
     drone.getPos()
 
     joystick.getAxis()
-    joystick.rates()
+    joystick.rates(deltaT)
 
     drone.roll(-joystick.roll)
     drone.pitch(-joystick.pitch)
     drone.yaw(-joystick.yaw)
     drone.throttle(joystick.throttle)
 
-    drone.physics()
+    drone.physics(deltaT)
 
     drone.move()
