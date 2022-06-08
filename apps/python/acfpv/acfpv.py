@@ -38,14 +38,16 @@ def f_roll_expo(val): config.roll_expo = val
 def f_pitch_expo(val): config.pitch_expo = val
 def f_yaw_expo(val): config.yaw_expo = val
 
-def f_scale(val): config.scale = val
 def f_drag(val): config.drag = val
-def f_gravity(val): config.gravity = val
+def f_mass(val): config.mass = val
+def f_power_to_weight(val): config.power_to_weight = val
 
 def f_cam_angle(val): config.cam_angle = val
 def f_cam_fov(val): config.cam_fov = val
 
 def initApp():
+    global speed_label
+
     appWindow = ac.newApp("ac-fpv")
     ac.setSize(appWindow, 340, 270)
 
@@ -57,12 +59,15 @@ def initApp():
     addSpinner(appWindow, "Pitch Expo", config.pitch_expo, (0.0, 100.0), (120, 100), f_pitch_expo)
     addSpinner(appWindow, "Yaw Expo", config.yaw_expo, (0.0, 100.0), (230, 100), f_yaw_expo)
 
-    addSpinner(appWindow, "Throttle Scale", config.scale, (0.0, 500.0), (10, 150), f_scale)
-    addSpinner(appWindow, "Drag", config.drag, (0.0, 50.0), (120, 150), f_drag)
-    addSpinner(appWindow, "Gravity", config.gravity, (0.0, 500.0), (230, 150), f_gravity)
+    addSpinner(appWindow, "Drag", config.drag, (0.0, 200.0), (120, 150), f_drag)
+    addSpinner(appWindow, "Mass (g)", config.mass, (0.0, 10000.0), (230, 150), f_mass)
+    addSpinner(appWindow, "Power-to-weight", config.power_to_weight, (1.0, 10.0), (10, 150), f_power_to_weight)
 
     addSpinner(appWindow, "Camera Angle", config.cam_angle, (0.0, 90.0), (10, 200), f_cam_angle)
-    addSpinner(appWindow, "Camera Fov", config.cam_fov, (60.0, 150.0), (120, 200), f_cam_fov)
+    addSpinner(appWindow, "Camera FOV", config.cam_fov, (60.0, 150.0), (120, 200), f_cam_fov)
+
+    speed_label = ac.addLabel(appWindow, "Speed: 0km/h")
+    ac.setPosition(speed_label, 230, 200)
 
     b_save = ac.addButton(appWindow, "Save")
     ac.setSize(b_save, 100, 20)
@@ -76,11 +81,13 @@ def acMain(ac_version):
 
 def acUpdate(deltaT):
     if ac.getCameraMode() != 6:
+        drone.__init__()
         return
 
     drone.setFov(config.cam_fov)
 
     drone.getRot()
+
     drone.getPos()
 
     joystick.getAxis()
@@ -93,4 +100,4 @@ def acUpdate(deltaT):
 
     drone.physics(deltaT)
 
-    drone.move()
+    ac.setText(speed_label, "Speed: {:.0f}km/h".format((drone.speed * 3.6)))
