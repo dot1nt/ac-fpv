@@ -108,7 +108,8 @@ class Drone:
 
         for a in range(len(self.position)):
             new_accel[a] = force_total[a] / (config.mass / 1000)
-            new_velocity[a] = self.velocity[a] + (self.acceleration[a] + new_accel[a]) * (deltaT * 0.5)
+            new_velocity[a] = self.velocity[a] + (self.acceleration[a] + new_accel[a]) * deltaT
+
             self.position[a] = new_position[a]
 
         self.speed = math.sqrt(new_velocity[0]**2 + new_velocity[1]**2 + new_velocity[2]**2) #ms-1
