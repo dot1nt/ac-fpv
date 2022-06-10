@@ -34,20 +34,28 @@ def rot_to_vec(rot, val):
 
     return z
 
-def drag(val, drag):
-    return val + val**2 * drag if val < 0 else val - val**2 * drag
+def drag(drag_coefficient, surface_area, air_density, velocity):
+        return (drag_coefficient * surface_area * ((air_density * (velocity * abs(velocity))) / 2))
 
 class Drone:
     def __init__(self):
-        self.x = 0
-        self.y = 0
-        self.z = 0
+        self.position = [0, 0, 0]
+        self.gravity = -9.80665     #gravity (ms-2)
+        self.air_density = 1.225    #density of air (kgm-3)
+        self.surface_area = (config.wingspan / 1000)**2  #surface area (m2)
+        self.velocity = (0, 0, 0)
+        self.acceleration = (0, 0, 0)
+        self.throttle_mag = (0, 0, 0)
+        self.speed = 0  #speed (ms-1)
     
     def setFov(self, val):
         ac.ext_setCameraFov(float(val))
 
     def getPos(self):
-        self.position = ac.ext_getCameraPosition()
+        cam_position = ac.ext_getCameraPosition()
+        self.position[0] = cam_position[2]
+        self.position[1] = cam_position[0]
+        self.position[2] = cam_position[1]
 
     def getRot(self):
         roll = ac.ext_getCameraRollRad()
@@ -68,32 +76,47 @@ class Drone:
     def throttle(self, val):
         rot = list(self.rotation)
 
-        if rot[0] > -1.57:
+        if math.degrees(rot[0]) > -90:
             rot[1] -= math.radians(config.cam_angle)
         else:
             rot[1] += math.radians(config.cam_angle)
 
         vec = rot_to_vec(rot, val)
 
-        self.x += vec[0]
-        self.y += -vec[1]
-        self.z += vec[2]
+        self.throttle_mag = (vec[0], vec[1], vec[2])
 
     def physics(self, deltaT):
-        _drag = config.drag * deltaT / 10
-        gravity = config.gravity * deltaT / 1000
 
-        self.x = drag(self.x, _drag)
-        self.y = drag(self.y, _drag)
-        self.z = drag(self.z, _drag)
+        new_position = [0, 0, 0]
 
-        self.z -= gravity
+        force_gravity = (self.gravity * (config.mass / 1000))
+        force_drag = [0, 0, 0]
+        force_throttle = [0, 0, 0]
+        force_total = [0, 0, 0]
 
-    def move(self):
+        new_accel = [0, 0, 0]
+        new_velocity = [0, 0, 0]
 
-        pos = list(self.position)
-        pos[2] += self.x
-        pos[0] += self.y
-        pos[1] += self.z
+        for a in range(len(self.position)):
+            new_position[a] = self.position[a] + self.velocity[a] * deltaT
+            force_drag[a] = drag((config.drag / 100), self.surface_area, self.air_density, self.velocity[a])
+            force_throttle[a] = self.throttle_mag[a] * (config.power_to_weight * -force_gravity)
+
+        force_total[0] = -force_drag[0] + force_throttle[0]
+        force_total[1] = -force_drag[1] + -force_throttle[1]
+        force_total[2] = force_gravity - force_drag[2] + force_throttle[2]
+
+        for a in range(len(self.position)):
+            new_accel[a] = force_total[a] / (config.mass / 1000)
+            new_velocity[a] = self.velocity[a] + (self.acceleration[a] + new_accel[a]) * deltaT
+
+            self.position[a] = new_position[a]
+
+        self.speed = math.sqrt(new_velocity[0]**2 + new_velocity[1]**2 + new_velocity[2]**2) #ms-1
+
+        pos = (self.position[1], self.position[2], self.position[0])
+
+        self.velocity = new_velocity
+        self.acceleration = new_accel
 
         ac.ext_setCameraPosition(tuple(pos))
