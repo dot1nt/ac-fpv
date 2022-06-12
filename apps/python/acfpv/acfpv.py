@@ -41,6 +41,7 @@ def f_yaw_expo(val): config.yaw_expo = val
 def f_drag(val): config.drag = val
 def f_mass(val): config.mass = val
 def f_power_to_weight(val): config.power_to_weight = val
+def f_wingspan(val): config.wingspan = val
 
 def f_cam_angle(val): config.cam_angle = val
 def f_cam_fov(val): config.cam_fov = val
@@ -49,29 +50,30 @@ def initApp():
     global speed_label
 
     appWindow = ac.newApp("ac-fpv")
-    ac.setSize(appWindow, 340, 270)
+    ac.setSize(appWindow, 340, 320)
 
-    addSpinner(appWindow, "Roll Rate", config.roll_rate, (0.0, 50.0), (10, 50), f_roll_rate)
-    addSpinner(appWindow, "Pitch Rate", config.pitch_rate, (0.0, 50.0), (120, 50), f_pitch_rate)
-    addSpinner(appWindow, "Yaw Rate", config.yaw_rate, (0.0, 50.0), (230, 50), f_yaw_rate)
+    speed_label = ac.addLabel(appWindow, "Speed: 0 km/h | 0 m/s")
+    ac.setPosition(speed_label, 10, 50)
 
-    addSpinner(appWindow, "Roll Expo", config.roll_expo, (0.0, 100.0), (10, 100), f_roll_expo)
-    addSpinner(appWindow, "Pitch Expo", config.pitch_expo, (0.0, 100.0), (120, 100), f_pitch_expo)
-    addSpinner(appWindow, "Yaw Expo", config.yaw_expo, (0.0, 100.0), (230, 100), f_yaw_expo)
+    addSpinner(appWindow, "Roll Rate", config.roll_rate, (1.0, 50.0), (10, 100), f_roll_rate)
+    addSpinner(appWindow, "Pitch Rate", config.pitch_rate, (1.0, 50.0), (120, 100), f_pitch_rate)
+    addSpinner(appWindow, "Yaw Rate", config.yaw_rate, (1.0, 50.0), (230, 100), f_yaw_rate)
 
-    addSpinner(appWindow, "Drag", config.drag, (0.0, 200.0), (120, 150), f_drag)
-    addSpinner(appWindow, "Mass (g)", config.mass, (0.0, 10000.0), (230, 150), f_mass)
-    addSpinner(appWindow, "Power-to-weight", config.power_to_weight, (1.0, 10.0), (10, 150), f_power_to_weight)
+    addSpinner(appWindow, "Roll Expo", config.roll_expo, (0.0, 100.0), (10, 150), f_roll_expo)
+    addSpinner(appWindow, "Pitch Expo", config.pitch_expo, (0.0, 100.0), (120, 150), f_pitch_expo)
+    addSpinner(appWindow, "Yaw Expo", config.yaw_expo, (0.0, 100.0), (230, 150), f_yaw_expo)
 
-    addSpinner(appWindow, "Camera Angle", config.cam_angle, (0.0, 90.0), (10, 200), f_cam_angle)
-    addSpinner(appWindow, "Camera FOV", config.cam_fov, (60.0, 150.0), (120, 200), f_cam_fov)
+    addSpinner(appWindow, "Drag", config.drag, (1.0, 200.0), (120, 200), f_drag)
+    addSpinner(appWindow, "Mass (g)", config.mass, (1.0, 5000.0), (230, 200), f_mass)
+    addSpinner(appWindow, "Power-to-weight", config.power_to_weight, (1.0, 10.0), (10, 200), f_power_to_weight)
+    addSpinner(appWindow, "Wingspan (mm)", config.wingspan, (50,  1000), (10, 250), f_wingspan)
 
-    speed_label = ac.addLabel(appWindow, "Speed: 0km/h")
-    ac.setPosition(speed_label, 230, 200)
+    addSpinner(appWindow, "Camera Angle", config.cam_angle, (0.0, 180.0), (120, 250), f_cam_angle)
+    addSpinner(appWindow, "Camera FOV", config.cam_fov, (40.0, 150.0), (230, 250), f_cam_fov)
 
     b_save = ac.addButton(appWindow, "Save")
     ac.setSize(b_save, 100, 20)
-    ac.setPosition(b_save, 120, 240)
+    ac.setPosition(b_save, 120, 285)
     ac.addOnClickedListener(b_save, config.save)
 
 def acMain(ac_version):
@@ -100,4 +102,4 @@ def acUpdate(deltaT):
 
     drone.physics(deltaT)
 
-    ac.setText(speed_label, "Speed: {:.0f}km/h".format((drone.speed * 3.6)))
+    ac.setText(speed_label, "Speed: {:.0f} km/h | {:.0f} m/s".format((drone.speed * 3.6), drone.speed))

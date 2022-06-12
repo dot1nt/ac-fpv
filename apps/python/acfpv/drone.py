@@ -40,9 +40,7 @@ def drag(drag_coefficient, surface_area, air_density, velocity):
 class Drone:
     def __init__(self):
         self.position = [0, 0, 0]
-        self.gravity = -9.80665     #gravity (ms-2)
-        self.air_density = 1.225    #density of air (kgm-3)
-        self.surface_area = (config.wingspan / 1000)**2  #surface area (m2)
+        self.rotation = (0, 0, 0)
         self.velocity = (0, 0, 0)
         self.acceleration = (0, 0, 0)
         self.throttle_mag = (0, 0, 0)
@@ -89,7 +87,7 @@ class Drone:
 
         new_position = [0, 0, 0]
 
-        force_gravity = (self.gravity * (config.mass / 1000))
+        force_gravity = (-config.gravity * (config.mass / 1000))
         force_drag = [0, 0, 0]
         force_throttle = [0, 0, 0]
         force_total = [0, 0, 0]
@@ -99,7 +97,7 @@ class Drone:
 
         for a in range(len(self.position)):
             new_position[a] = self.position[a] + self.velocity[a] * deltaT
-            force_drag[a] = drag((config.drag / 100), self.surface_area, self.air_density, self.velocity[a])
+            force_drag[a] = drag((config.drag / 100), (config.wingspan / 1000)**2, config.air_density, self.velocity[a])
             force_throttle[a] = self.throttle_mag[a] * (config.power_to_weight * -force_gravity)
 
         force_total[0] = -force_drag[0] + force_throttle[0]
@@ -109,7 +107,6 @@ class Drone:
         for a in range(len(self.position)):
             new_accel[a] = force_total[a] / (config.mass / 1000)
             new_velocity[a] = self.velocity[a] + (self.acceleration[a] + new_accel[a]) * deltaT
-
             self.position[a] = new_position[a]
 
         self.speed = math.sqrt(new_velocity[0]**2 + new_velocity[1]**2 + new_velocity[2]**2) #ms-1
