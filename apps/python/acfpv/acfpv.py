@@ -41,7 +41,7 @@ def f_yaw_expo(val): config.yaw_expo = val
 def f_drag(val): config.drag = val
 def f_mass(val): config.mass = val
 def f_power_to_weight(val): config.power_to_weight = val
-def f_wingspan(val): config.wingspan = val
+def f_surface_area(val): config.surface_area = val
 
 def f_cam_angle(val): config.cam_angle = val
 def f_cam_fov(val): config.cam_fov = val
@@ -66,7 +66,7 @@ def initApp():
     addSpinner(appWindow, "Drag", config.drag, (1.0, 200.0), (120, 200), f_drag)
     addSpinner(appWindow, "Mass (g)", config.mass, (1.0, 5000.0), (230, 200), f_mass)
     addSpinner(appWindow, "Power-to-weight", config.power_to_weight, (1.0, 10.0), (10, 200), f_power_to_weight)
-    addSpinner(appWindow, "Wingspan (mm)", config.wingspan, (50,  1000), (10, 250), f_wingspan)
+    addSpinner(appWindow, "Surface area (cm^2)", config.surface_area, (5,  2000), (10, 250), f_surface_area)
 
     addSpinner(appWindow, "Camera Angle", config.cam_angle, (0.0, 180.0), (120, 250), f_cam_angle)
     addSpinner(appWindow, "Camera FOV", config.cam_fov, (40.0, 150.0), (230, 250), f_cam_fov)

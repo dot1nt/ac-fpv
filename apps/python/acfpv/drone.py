@@ -97,7 +97,7 @@ class Drone:
 
         for a in range(len(self.position)):
             new_position[a] = self.position[a] + self.velocity[a] * deltaT
-            force_drag[a] = drag((config.drag / 100), (config.wingspan / 1000)**2, config.air_density, self.velocity[a])
+            force_drag[a] = drag((config.drag / 100), (config.surface_area / 10000), config.air_density, self.velocity[a])
             force_throttle[a] = self.throttle_mag[a] * (config.power_to_weight * -force_gravity)
 
         force_total[0] = -force_drag[0] + force_throttle[0]

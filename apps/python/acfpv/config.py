@@ -7,10 +7,10 @@ def load():
     config = ConfigParser()
     config.read(config_file)
 
-    global device_id;	           device_id = config.getint('Input', 'device_id')
-    global axis_roll;	           axis_roll = config.getint('Input', 'axis_roll')
-    global axis_pitch;	           axis_pitch = config.getint('Input', 'axis_pitch')
-    global axis_yaw;	           axis_yaw = config.getint('Input', 'axis_yaw')
+    global device_id;              device_id = config.getint('Input', 'device_id')
+    global axis_roll;              axis_roll = config.getint('Input', 'axis_roll')
+    global axis_pitch;             axis_pitch = config.getint('Input', 'axis_pitch')
+    global axis_yaw;               axis_yaw = config.getint('Input', 'axis_yaw')
     global axis_throttle;          axis_throttle = config.getint('Input', 'axis_throttle')
     global axis_throttle_invert;   axis_throttle_invert = config.getint('Input', 'axis_throttle_invert')
     global axis_roll_invert;       axis_roll_invert = config.getint('Input', 'axis_roll_invert')
@@ -18,22 +18,22 @@ def load():
     global axis_yaw_invert;        axis_yaw_invert = config.getint('Input', 'axis_yaw_invert')
     global axis_throttle_combined; axis_throttle_combined = config.getint('Input', 'axis_throttle_combined')
 
-    global roll_rate;	           roll_rate = config.getint('Rates', 'roll_rate') 
-    global roll_expo;	           roll_expo = config.getint('Rates', 'roll_expo')
-    global pitch_rate;	           pitch_rate = config.getint('Rates', 'pitch_rate')
-    global pitch_expo;	           pitch_expo = config.getint('Rates', 'pitch_expo')
-    global yaw_rate;	           yaw_rate = config.getint('Rates', 'yaw_rate')
-    global yaw_expo;	           yaw_expo = config.getint('Rates', 'yaw_expo')
+    global roll_rate;              roll_rate = config.getint('Rates', 'roll_rate') 
+    global roll_expo;              roll_expo = config.getint('Rates', 'roll_expo')
+    global pitch_rate;             pitch_rate = config.getint('Rates', 'pitch_rate')
+    global pitch_expo;             pitch_expo = config.getint('Rates', 'pitch_expo')
+    global yaw_rate;               yaw_rate = config.getint('Rates', 'yaw_rate')
+    global yaw_expo;               yaw_expo = config.getint('Rates', 'yaw_expo')
 
     global gravity;                gravity = config.getfloat('Physics', 'gravity')
     global air_density;            air_density = config.getfloat('Physics', 'air_density')
-    global drag;		           drag = config.getint('Physics', 'drag')
-    global mass; 	               mass = config.getint('Physics', 'mass')
-    global power_to_weight;		   power_to_weight = config.getint('Physics', 'power_to_weight')
-    global wingspan;		       wingspan = config.getint('Physics', 'wingspan')
+    global drag;                   drag = config.getint('Physics', 'drag')
+    global mass;                   mass = config.getint('Physics', 'mass')
+    global power_to_weight;        power_to_weight = config.getint('Physics', 'power_to_weight')
+    global surface_area;           surface_area = config.getint('Physics', 'surface_area')
 
     global cam_fov;                cam_fov = config.getint('Drone', 'cam_fov')
-    global cam_angle;	           cam_angle = config.getint('Drone', 'cam_angle')
+    global cam_angle;              cam_angle = config.getint('Drone', 'cam_angle')
 
 def save(*x):
     config = ConfigParser()
@@ -65,7 +65,7 @@ def save(*x):
         'drag': str(drag),
         'mass': str(mass),
         'power_to_weight': str(power_to_weight),
-        'wingspan': str(wingspan),
+        'surface_area': str(surface_area),
     }
 
     config['Drone'] = {
