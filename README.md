@@ -18,6 +18,5 @@ I don't really know how to program, so if you see something wrong, please make a
 
 
 # Todo / Ideas
-- Accurate rates (betaflight, kiss, raceflight)
 - Osd
 - Video noise
