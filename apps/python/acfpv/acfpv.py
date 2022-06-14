@@ -13,14 +13,14 @@ os.environ['PATH'] = os.environ['PATH'] + ";."
 import ac
 import acsys
 
-from input import Input
+import input
 import drone
 import config
 
 config.load()
 
 drone = drone.Drone()
-joystick = Input()
+joystick = input.Input()
 
 def addSpinner(appWindow, name, val, scale, pos, callback):
     spinner = ac.addSpinner(appWindow, name)
@@ -38,6 +38,10 @@ def f_roll_expo(val): config.roll_expo = val
 def f_pitch_expo(val): config.pitch_expo = val
 def f_yaw_expo(val): config.yaw_expo = val
 
+def f_roll_super(val): config.roll_super = val
+def f_pitch_super(val): config.pitch_super = val
+def f_yaw_super(val): config.yaw_super = val
+
 def f_drag(val): config.drag = val
 def f_mass(val): config.mass = val
 def f_power_to_weight(val): config.power_to_weight = val
@@ -50,30 +54,34 @@ def initApp():
     global speed_label
 
     appWindow = ac.newApp("ac-fpv")
-    ac.setSize(appWindow, 340, 320)
+    ac.setSize(appWindow, 340, 400)
 
     speed_label = ac.addLabel(appWindow, "Speed: 0 km/h | 0 m/s")
     ac.setPosition(speed_label, 10, 50)
 
-    addSpinner(appWindow, "Roll Rate", config.roll_rate, (1.0, 50.0), (10, 100), f_roll_rate)
-    addSpinner(appWindow, "Pitch Rate", config.pitch_rate, (1.0, 50.0), (120, 100), f_pitch_rate)
-    addSpinner(appWindow, "Yaw Rate", config.yaw_rate, (1.0, 50.0), (230, 100), f_yaw_rate)
+    addSpinner(appWindow, "Roll Rate", config.roll_rate, (1.0, 300.0), (10, 100), f_roll_rate)
+    addSpinner(appWindow, "Pitch Rate", config.pitch_rate, (1.0, 300.0), (120, 100), f_pitch_rate)
+    addSpinner(appWindow, "Yaw Rate", config.yaw_rate, (1.0, 300.0), (230, 100), f_yaw_rate)
 
     addSpinner(appWindow, "Roll Expo", config.roll_expo, (0.0, 100.0), (10, 150), f_roll_expo)
     addSpinner(appWindow, "Pitch Expo", config.pitch_expo, (0.0, 100.0), (120, 150), f_pitch_expo)
     addSpinner(appWindow, "Yaw Expo", config.yaw_expo, (0.0, 100.0), (230, 150), f_yaw_expo)
 
-    addSpinner(appWindow, "Drag", config.drag, (1.0, 200.0), (120, 200), f_drag)
-    addSpinner(appWindow, "Mass (g)", config.mass, (1.0, 5000.0), (230, 200), f_mass)
-    addSpinner(appWindow, "Power-to-weight", config.power_to_weight, (1.0, 10.0), (10, 200), f_power_to_weight)
-    addSpinner(appWindow, "Surface area (cm^2)", config.surface_area, (5,  2000), (10, 250), f_surface_area)
+    addSpinner(appWindow, "Roll Super", config.roll_super, (0.0, 200.0), (10, 200), f_roll_super)
+    addSpinner(appWindow, "Pitch Super", config.pitch_super, (0.0, 200.0), (120, 200), f_pitch_super)
+    addSpinner(appWindow, "Yaw Super", config.yaw_super, (0.0, 200.0), (230, 200), f_yaw_super)
 
-    addSpinner(appWindow, "Camera Angle", config.cam_angle, (0.0, 180.0), (120, 250), f_cam_angle)
-    addSpinner(appWindow, "Camera FOV", config.cam_fov, (40.0, 150.0), (230, 250), f_cam_fov)
+    addSpinner(appWindow, "Drag", config.drag, (1.0, 200.0), (10, 270), f_drag)
+    addSpinner(appWindow, "Mass (g)", config.mass, (1.0, 5000.0), (120, 270), f_mass)
+    addSpinner(appWindow, "Power-to-weight", config.power_to_weight, (1.0, 10.0), (230, 270), f_power_to_weight)
+    
+    addSpinner(appWindow, "Surface area", config.surface_area, (5,  2000), (10, 320), f_surface_area)
+    addSpinner(appWindow, "Camera Angle", config.cam_angle, (0.0, 180.0), (120, 320), f_cam_angle)
+    addSpinner(appWindow, "Camera FOV", config.cam_fov, (40.0, 150.0), (230, 320), f_cam_fov)
 
     b_save = ac.addButton(appWindow, "Save")
     ac.setSize(b_save, 100, 20)
-    ac.setPosition(b_save, 120, 285)
+    ac.setPosition(b_save, 120, 365)
     ac.addOnClickedListener(b_save, config.save)
 
 def acMain(ac_version):
@@ -89,7 +97,6 @@ def acUpdate(deltaT):
     drone.setFov(config.cam_fov)
 
     drone.getRot()
-
     drone.getPos()
 
     joystick.getAxis()

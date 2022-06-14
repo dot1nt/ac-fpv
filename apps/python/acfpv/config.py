@@ -20,10 +20,13 @@ def load():
 
     global roll_rate;              roll_rate = config.getint('Rates', 'roll_rate') 
     global roll_expo;              roll_expo = config.getint('Rates', 'roll_expo')
+    global roll_super;             roll_super = config.getint('Rates', 'roll_super')
     global pitch_rate;             pitch_rate = config.getint('Rates', 'pitch_rate')
     global pitch_expo;             pitch_expo = config.getint('Rates', 'pitch_expo')
+    global pitch_super;            pitch_super = config.getint('Rates', 'pitch_super')
     global yaw_rate;               yaw_rate = config.getint('Rates', 'yaw_rate')
     global yaw_expo;               yaw_expo = config.getint('Rates', 'yaw_expo')
+    global yaw_super;              yaw_super = config.getint('Rates', 'yaw_super')
 
     global gravity;                gravity = config.getfloat('Physics', 'gravity')
     global air_density;            air_density = config.getfloat('Physics', 'air_density')
@@ -53,10 +56,13 @@ def save(*x):
     config['Rates'] = {
         'roll_rate': str(roll_rate),
         'roll_expo': str(roll_expo),
+        'roll_super': str(roll_super),
         'pitch_rate': str(pitch_rate),
         'pitch_expo': str(pitch_expo),
+        'pitch_super': str(pitch_super),
         'yaw_rate': str(yaw_rate),
         'yaw_expo': str(yaw_expo),
+        'yaw_super': str(yaw_super),
     }
 
     config['Physics'] = {
