@@ -1,6 +1,7 @@
-# Asetto Corsa Fpv
-Assetto Corsa fpv drone mod. \
+# Asetto Corsa fpv drone mod
 I don't really know how to program, so if you see something wrong, please make a PR or open a issue.
+
+https://user-images.githubusercontent.com/103942006/175307366-7ac3475c-4008-4405-ad1a-bdddd1557165.mp4
 
 # Setup
 **Content Manager / Custom Shaders Patch is required**
