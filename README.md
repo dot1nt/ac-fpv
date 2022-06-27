@@ -15,7 +15,7 @@ https://user-images.githubusercontent.com/103942006/175307366-7ac3475c-4008-4405
 
 ![Inputs](https://github.com/dot1nt/ac-fpv/blob/main/assets/cm.png)
 
-5. Load in game and press F7.
+5. Load in game and press the start button.
 
 
 # Todo / Ideas

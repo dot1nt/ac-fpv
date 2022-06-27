@@ -9,7 +9,7 @@ def dot(v1, v2):
 
     return (a,b,c)
 
-def rot_to_vec(rot, val):
+def rotToVec(rot, val):
     r = rot[0]
     p = rot[1]
     y = rot[2]
@@ -39,6 +39,8 @@ def drag(drag_coefficient, surface_area, air_density, velocity):
 
 class Drone:
     def __init__(self):
+        self.running = False
+
         self.position = [0, 0, 0]
         self.rotation = (0, 0, 0)
         self.velocity = (0, 0, 0)
@@ -62,14 +64,10 @@ class Drone:
 
         self.rotation = (roll, pitch, yaw)
 
-    def roll(self, val):
-        ac.freeCameraRotateRoll(val)
-
-    def pitch(self, val):
-        ac.freeCameraRotatePitch(val)
-
-    def yaw(self, val):
-        ac.freeCameraRotateHeading(val)
+    def rotate(self, roll, pitch, yaw):
+        ac.freeCameraRotateRoll(roll)
+        ac.freeCameraRotatePitch(pitch)
+        ac.freeCameraRotateHeading(yaw)
 
     def throttle(self, val):
         rot = list(self.rotation)
@@ -79,7 +77,7 @@ class Drone:
         else:
             rot[1] += math.radians(config.cam_angle)
 
-        vec = rot_to_vec(rot, val)
+        vec = rotToVec(rot, val)
 
         self.throttle_mag = (vec[0], vec[1], vec[2])
 
