@@ -17,6 +17,11 @@ https://user-images.githubusercontent.com/103942006/175307366-7ac3475c-4008-4405
 
 5. Load in game and press the start button.
 
+## Gyroflow
+You can stabilize recorded footage afterward with [gyroflow](https://github.com/gyroflow/gyroflow). Just set a filename (full path) in the app settings and use that file as motion data for the video. The file is overwritten every time the start button is pressed. 
+
+Gyro data is sampled every frame, so cap the fps to get consistent results. You may need to play around with the lens profiles or make your own to get good results.
+
 
 # Todo / Ideas
 - Osd
