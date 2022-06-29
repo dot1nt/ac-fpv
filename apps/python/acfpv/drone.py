@@ -1,6 +1,7 @@
 import ac
 import math
 import config
+import time
 
 def dot(v1, v2):
     a = v1[0]*v2[0][0] + v1[1]*v2[1][0] + v1[2]*v2[2][0]
@@ -37,6 +38,51 @@ def rotToVec(rot, val):
 def drag(drag_coefficient, surface_area, air_density, velocity):
         return (drag_coefficient * surface_area * ((air_density * (velocity * abs(velocity))) / 2))
 
+# https://www.desmos.com/calculator/xnjxq7rowq
+def getRotSpeed(input, rate, expo, super_rate):
+    rate /= 100
+    expo /= 100
+    super_rate /= 100
+
+    p = 1 / (1 - (abs(input) * super_rate))
+    q = input * abs(input)**3 * expo + input * (1 - expo)
+
+    return math.radians((200 * q * rate) * p)
+
+
+class GyroFlow:
+    def __init__(self):
+        self.filename = config.filename
+        self.enabled = True if self.filename != "" else False
+
+        self.t = 0
+
+    def start(self):
+        if not self.enabled:
+            return
+
+        timestamp = time.time()
+
+        with open(self.filename, "w") as f:
+            f.write("""GYROFLOW IMU LOG
+version,1.1
+orientation,ZyX
+timestamp,{0}
+tscale,{1}
+gscale,1
+t, gx, gy, gz
+""".format(timestamp, 1/config.fps))
+
+    def add(self, gx, gy, gz):
+        if not self.enabled:
+            return
+
+        self.t += 1
+
+        with open(self.filename, "a") as f:
+            f.write("{}, {}, {}, {}\n".format(self.t, gx, gy, gz))
+
+
 class Drone:
     def __init__(self):
         self.running = False
@@ -47,6 +93,8 @@ class Drone:
         self.acceleration = (0, 0, 0)
         self.throttle_mag = (0, 0, 0)
         self.speed = 0  #speed (ms-1)
+
+        self.gyrodata = GyroFlow()
     
     def setFov(self, val):
         ac.ext_setCameraFov(float(val))
@@ -64,10 +112,16 @@ class Drone:
 
         self.rotation = (roll, pitch, yaw)
 
-    def rotate(self, roll, pitch, yaw):
-        ac.freeCameraRotateRoll(roll)
-        ac.freeCameraRotatePitch(pitch)
-        ac.freeCameraRotateHeading(yaw)
+    def rotate(self, roll, pitch, yaw, deltaT):
+        roll = getRotSpeed(roll, config.roll_rate, config.roll_expo, config.roll_super)
+        pitch = getRotSpeed(pitch, config.pitch_rate, config.pitch_expo, config.pitch_super)
+        yaw = getRotSpeed(yaw, config.yaw_rate, config.yaw_expo, config.yaw_super)
+
+        self.gyrodata.add(roll, pitch, yaw)
+
+        ac.freeCameraRotateRoll(roll * deltaT)
+        ac.freeCameraRotatePitch(pitch * deltaT)
+        ac.freeCameraRotateHeading(yaw * deltaT)
 
     def throttle(self, val):
         rot = list(self.rotation)

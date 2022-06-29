@@ -35,6 +35,7 @@ def start(*x):
         ac.setCameraMode(6)
         ac.setText(b_start, "Stop")
         drone.running = True
+        drone.gyrodata.start()
 
 def initApp():
     global l_speed
@@ -73,7 +74,7 @@ def initApp():
 
     b_save = ac.addButton(appWindow, "Save")
     ac.setSize(b_save, 100, 22)
-    ac.setPosition(b_save, 110, 365)
+    ac.setPosition(b_save, 120, 365)
     ac.addOnClickedListener(b_save, config.save)
 
 def acMain(ac_version):
@@ -91,9 +92,8 @@ def acUpdate(deltaT):
     drone.getPos()
 
     joystick.getAxis()
-    joystick.rates(deltaT)
 
-    drone.rotate(-joystick.roll, -joystick.pitch, -joystick.yaw)
+    drone.rotate(-joystick.roll, -joystick.pitch, -joystick.yaw, deltaT)
     drone.throttle(joystick.throttle)
 
     drone.physics(deltaT)

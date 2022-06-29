@@ -15,6 +15,8 @@ s_physics = ["gravity", "air_density", "drag", "mass", "power_to_weight", "surfa
 
 s_drone = ["cam_fov", "cam_angle"]
 
+s_gyroflow = ["filename", "fps"]
+
 def load():
     config = ConfigParser()
     config.read(config_file)
@@ -30,6 +32,9 @@ def load():
 
     for setting in s_drone:
         exec('global {0}; {0} = config.getfloat("Drone", "{0}")'.format(setting))
+
+    global filename; filename = config.get('Gyroflow', 'filename')
+    global fps; fps = config.getfloat('Gyroflow', 'fps')
 
 def save(*x):
     config = ConfigParser()
@@ -49,6 +54,10 @@ def save(*x):
     config['Drone'] = {}
     for setting in s_drone:
         config['Drone'][setting] = str(globals()[setting])
+
+    config['Gyroflow'] = {}
+    for setting in s_gyroflow:
+        config['Gyroflow'][setting] = str(globals()[setting])
 
     with open(config_file, 'w') as configfile:
         config.write(configfile)

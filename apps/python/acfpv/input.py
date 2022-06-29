@@ -4,17 +4,6 @@ import math
 
 import config
 
-# https://www.desmos.com/calculator/xnjxq7rowq
-def getRotSpeed(input, rate, expo, super_rate):
-    rate /= 100
-    expo /= 100
-    super_rate /= 100
-
-    p = 1 / (1 - (abs(input) * super_rate))
-    q = input * abs(input)**3 * expo + input * (1 - expo)
-
-    return math.radians((200 * q * rate) * p)
-
 class Input:
     def getAxis(self):
         id = config.device_id
@@ -31,8 +20,3 @@ class Input:
         
         self.throttle = self.throttle if config.axis_throttle_combined else (self.throttle + 1) * 0.5
         self.throttle = max(self.throttle, 0)
-    
-    def rates(self, deltaT):
-        self.roll = getRotSpeed(self.roll, config.roll_rate, config.roll_expo, config.roll_super) * deltaT
-        self.pitch = getRotSpeed(self.pitch, config.pitch_rate, config.pitch_expo, config.pitch_super) * deltaT
-        self.yaw = getRotSpeed(self.yaw, config.yaw_rate, config.yaw_expo, config.yaw_super) * deltaT
