@@ -93,7 +93,7 @@ def acUpdate(deltaT):
 
     joystick.getAxis()
 
-    drone.rotate(-joystick.roll, -joystick.pitch, -joystick.yaw, deltaT)
+    drone.rotate(-joystick.roll, -joystick.pitch, -joystick.yaw, config.cam_angle, deltaT)
     drone.throttle(joystick.throttle)
 
     drone.physics(deltaT)

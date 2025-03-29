@@ -112,10 +112,16 @@ class Drone:
 
         self.rotation = (roll, pitch, yaw)
 
-    def rotate(self, roll, pitch, yaw, deltaT):
-        roll = getRotSpeed(roll, config.roll_rate, config.roll_expo, config.roll_super)
-        pitch = getRotSpeed(pitch, config.pitch_rate, config.pitch_expo, config.pitch_super)
-        yaw = getRotSpeed(yaw, config.yaw_rate, config.yaw_expo, config.yaw_super)
+    def rotate(self, roll_input, pitch_input, yaw_input, camera_angle, deltaT):
+        roll_speed = getRotSpeed(roll_input, config.roll_rate, config.roll_expo, config.roll_super)
+        pitch_speed = getRotSpeed(pitch_input, config.pitch_rate, config.pitch_expo, config.pitch_super)
+        yaw_speed = getRotSpeed(yaw_input, config.yaw_rate, config.yaw_expo, config.yaw_super) 
+
+        camera_angle_rad = math.radians(camera_angle)
+
+        roll = roll_speed * math.cos(camera_angle_rad) - yaw_speed * math.sin(camera_angle_rad)
+        pitch = pitch_speed
+        yaw =  yaw_speed * math.cos(camera_angle_rad) + roll_speed * math.sin(camera_angle_rad)
 
         self.gyrodata.add(roll, pitch, yaw)
 
